@@ -28,6 +28,8 @@ public class StarDictInfo {
     private final int synWordCount;
     private final boolean oftindexbits64;
 
+    private final String sametypesequence;
+
     public StarDictInfo(final Map<String, String> header) throws Exception {
         this.bookName = header.get("bookname");
         this.version = header.get("version");
@@ -51,6 +53,7 @@ public class StarDictInfo {
             throw new Exception("StarDict dictionaries other than idxoffsetbits=64 or 32 are not supported.");
         }
         this.oftindexbits64 = (idxoffsetbits == 64);
+        this.sametypesequence = header.getOrDefault("sametypesequence", null);
     }
 
     public String getBookName() {
@@ -75,5 +78,9 @@ public class StarDictInfo {
 
     public boolean isOftindexbits64() {
         return oftindexbits64;
+    }
+
+    public String getSametypesequence() {
+        return sametypesequence;
     }
 }
