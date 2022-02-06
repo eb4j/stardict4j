@@ -26,24 +26,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Abstract base class to represent StarDict dictionary data.
+ */
 public abstract class StarDictDictionary implements AutoCloseable {
 
     protected final DictionaryData<IndexEntry> data;
 
-    protected final String bookName;
-    protected final String dictFilePath;
+    protected final StarDictInfo info;
 
     /**
      * @param data collection of <code>Entry</code>s loaded from file
      */
-    StarDictDictionary(final DictionaryData<IndexEntry> data, final String dictFilePath, final String bookName) {
+    StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info) {
         this.data = data;
-        this.dictFilePath = dictFilePath;
-        this.bookName = bookName;
+        this.info = info;
     }
 
     public String getDictionaryName() {
-        return bookName;
+        return info.getBookName();
+    }
+
+    public String getDictionaryVersion() {
+        return info.getVersion();
     }
 
     private final Map<IndexEntry, String> cache = new HashMap<>();

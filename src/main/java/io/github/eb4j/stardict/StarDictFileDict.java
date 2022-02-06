@@ -29,9 +29,9 @@ import java.nio.charset.StandardCharsets;
 public class StarDictFileDict extends StarDictDictionary {
     private final RandomAccessFile dataFile;
 
-    StarDictFileDict(final String bookName, final File dictFile, final DictionaryData<IndexEntry> data)
+    StarDictFileDict(final StarDictInfo info, final File dictFile, final DictionaryData<IndexEntry> data)
             throws FileNotFoundException {
-        super(data, bookName, dictFile.getPath());
+        super(data, info);
         dataFile = new RandomAccessFile(dictFile, "r");
     }
 

@@ -32,9 +32,9 @@ public class StarDictZipDict extends StarDictDictionary {
 
     private final DictZipInputStream dataFile;
 
-    StarDictZipDict(final String bookName, final File dictFile, final DictionaryData<IndexEntry> data)
+    StarDictZipDict(final StarDictInfo info, final File dictFile, final DictionaryData<IndexEntry> data)
             throws IOException {
-        super(data, bookName, dictFile.getPath());
+        super(data, info);
         dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
     }
 

@@ -21,9 +21,13 @@ package io.github.eb4j.stardict;
 import org.trie4j.MapTrie;
 import org.trie4j.patricia.MapPatriciaTrie;
 
+import java.util.ArrayList;
+import java.util.List;
+
 final class DictionaryDataBuilder<T> {
 
     private MapTrie<Object> mapPatriciaTrie = new MapPatriciaTrie<>();
+    private List<String> keys = new ArrayList<>();
 
     /**
      * Builder factory for POJO class DictionaryData.
@@ -47,6 +51,7 @@ final class DictionaryDataBuilder<T> {
      * @param key
      */
     public void add(final String key, final long offset, final int size) {
+        keys.add(key);
         Object stored = mapPatriciaTrie.get(key);
         if (stored == null) {
             mapPatriciaTrie.insert(key, new IndexEntry(offset, size));
@@ -58,6 +63,18 @@ final class DictionaryDataBuilder<T> {
             }
             mapPatriciaTrie.put(key, stored);
         }
+    }
+
+    public void addSynonym(final String key, final int index) {
+        String ref = keys.get(index);
+        Object stored = mapPatriciaTrie.get(key);
+        IndexEntry entry;
+        if (stored instanceof Object[]) {
+            entry = (IndexEntry) ((Object[])stored)[0];
+        } else {
+            entry = (IndexEntry) stored;
+        }
+        add(ref, entry.getStart(), entry.getLen());
     }
 
     /**

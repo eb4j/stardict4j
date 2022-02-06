@@ -39,8 +39,8 @@ public class StarDict {
 
     public StarDictDictionary loadDict(final File ifoFile) throws Exception {
         Map<String, String> header = readIFO(ifoFile);
-        String bookName = header.get("bookname");
-        String version = header.get("version");
+        StarDictInfo info = new StarDictInfo(header);
+        String version = info.getVersion();
         if (!"2.4.2".equals(version) && !"3.0.0".equals(version)) {
             throw new Exception("Invalid version of dictionary: " + version);
         }
@@ -72,16 +72,18 @@ public class StarDict {
 
         File idxFile = getFile(dictName, ".idx.gz", ".idx")
                 .orElseThrow(() -> new FileNotFoundException("No .idx file could be found"));
-        DictionaryData<IndexEntry> data = loadData(idxFile, idxoffsetbits == 64);
+        File synFile = getFile(dictName, ".syn.gz", ".syn")
+                .orElse(null);
+        DictionaryData<IndexEntry> data = loadData(idxFile, synFile, idxoffsetbits == 64);
 
         File dictFile = getFile(dictName, ".dict.dz", ".dict")
                 .orElseThrow(() -> new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName));
 
         try {
             if (dictFile.getName().endsWith(".dz")) {
-                return new StarDictZipDict(bookName, dictFile, data);
+                return new StarDictZipDict(info, dictFile, data);
             } else {
-                return new StarDictFileDict(bookName, dictFile, data);
+                return new StarDictFileDict(info, dictFile, data);
             }
         } catch (IOException ex) {
             throw new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName);
@@ -118,7 +120,8 @@ public class StarDict {
                 .findFirst();
     }
 
-    private DictionaryData<IndexEntry> loadData(final File idxFile, final boolean off64) throws IOException {
+    private DictionaryData<IndexEntry> loadData(final File idxFile, final File synFile, final boolean off64)
+            throws IOException {
         DictionaryDataBuilder<IndexEntry> builder = new DictionaryDataBuilder<>();
         InputStream is = new FileInputStream(idxFile);
         try {
@@ -143,6 +146,31 @@ public class StarDict {
                         }
                         int bodyLength = idx.readInt();
                         builder.add(key, bodyOffset, bodyLength);
+                    } else {
+                        mem.write(b);
+                    }
+                }
+            }
+        } finally {
+            is.close();
+        }
+        is = new FileInputStream(synFile);
+        try {
+            if (synFile.getName().endsWith(".gz")) {
+                is = new GZIPInputStream(is, 8192);
+            }
+            try (DataInputStream syn = new DataInputStream(new BufferedInputStream(is));
+                 ByteArrayOutputStream mem = new ByteArrayOutputStream()) {
+                while (true) {
+                    int b = syn.read();
+                    if (b == -1) {
+                        break;
+                    }
+                    if (b == 0) {
+                        String key = new String(mem.toByteArray(), 0, mem.size(), StandardCharsets.UTF_8);
+                        mem.reset();
+                        int index = syn.readInt();
+                        builder.addSynonym(key, index);
                     } else {
                         mem.write(b);
                     }
