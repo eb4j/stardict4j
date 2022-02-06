@@ -154,6 +154,12 @@ public class StarDict {
         } finally {
             is.close();
         }
+        // when there is no syn file.
+        if (synFile == null) {
+            return builder.build();
+
+        }
+        //
         is = new FileInputStream(synFile);
         try {
             if (synFile.getName().endsWith(".gz")) {

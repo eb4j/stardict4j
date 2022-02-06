@@ -40,7 +40,7 @@ public class StarDictInfo {
         } else {
             synWordCount = -1;
         }
-        String wc = header.get("wordCount");
+        String wc = header.get("wordcount");
         wordCount = Integer.parseUnsignedInt(wc);
         int idxoffsetbits = 32;
         if ("3.0.0".equals(version)) {
