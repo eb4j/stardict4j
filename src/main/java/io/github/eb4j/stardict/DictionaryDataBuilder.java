@@ -70,7 +70,7 @@ final class DictionaryDataBuilder<T> {
         Object stored = mapPatriciaTrie.get(key);
         IndexEntry entry;
         if (stored instanceof Object[]) {
-            entry = (IndexEntry) ((Object[])stored)[0];
+            entry = (IndexEntry) ((Object[]) stored)[0];
         } else {
             entry = (IndexEntry) stored;
         }
