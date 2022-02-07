@@ -37,7 +37,10 @@ import java.util.zip.GZIPInputStream;
  */
 public class StarDict {
 
-    public StarDictDictionary loadDict(final File ifoFile) throws Exception {
+    private StarDict() {
+    }
+
+    public static StarDictDictionary loadDict(final File ifoFile) throws Exception {
         Map<String, String> header = readIFO(ifoFile);
         StarDictInfo info = new StarDictInfo(header);
         String version = info.getVersion();
@@ -45,11 +48,12 @@ public class StarDict {
             throw new Exception("Invalid version of dictionary: " + version);
         }
         String sametypesequence = header.get("sametypesequence");
-        if (!"g".equals(sametypesequence)
-                && !"m".equals(sametypesequence)
-                && !"x".equals(sametypesequence)
-                && !"h".equals(sametypesequence)) {
-            throw new Exception("Invalid type of dictionary: " + sametypesequence);
+        DictionaryEntry.EntryType[] types = new DictionaryEntry.EntryType[sametypesequence.length()];
+        for (int i = 0; i < sametypesequence.length(); i++) {
+            types[i] = DictionaryEntry.EntryType.getTypeByValue(sametypesequence.charAt(i));
+            if (types[i] == null) {
+                throw new Exception("Invalid dictionary type: " + sametypesequence);
+            }
         }
 
         int idxoffsetbits = 32;
@@ -74,7 +78,7 @@ public class StarDict {
                 .orElseThrow(() -> new FileNotFoundException("No .idx file could be found"));
         File synFile = getFile(dictName, ".syn.gz", ".syn")
                 .orElse(null);
-        DictionaryData<IndexEntry> data = loadData(idxFile, synFile, idxoffsetbits == 64);
+        DictionaryData<IndexEntry> data = loadData(idxFile, synFile, idxoffsetbits == 64, types);
 
         File dictFile = getFile(dictName, ".dict.dz", ".dict")
                 .orElseThrow(() -> new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName));
@@ -93,7 +97,7 @@ public class StarDict {
     /**
      * Read header.
      */
-    private Map<String, String> readIFO(final File ifoFile) throws Exception {
+    private static Map<String, String> readIFO(final File ifoFile) throws Exception {
         Map<String, String> result = new TreeMap<>();
         try (BufferedReader rd = Files.newBufferedReader(ifoFile.toPath(), StandardCharsets.UTF_8)) {
             String line;
@@ -115,13 +119,13 @@ public class StarDict {
         return result;
     }
 
-    private Optional<File> getFile(final String basename, final String... suffixes) {
+    private static Optional<File> getFile(final String basename, final String... suffixes) {
         return Stream.of(suffixes).map(suff -> new File(basename + suff)).filter(File::isFile)
                 .findFirst();
     }
 
-    private DictionaryData<IndexEntry> loadData(final File idxFile, final File synFile, final boolean off64)
-            throws IOException {
+    private static DictionaryData<IndexEntry> loadData(final File idxFile, final File synFile, final boolean off64,
+                                                       final DictionaryEntry.EntryType[] types) throws IOException {
         DictionaryDataBuilder<IndexEntry> builder = new DictionaryDataBuilder<>();
         InputStream is = new FileInputStream(idxFile);
         try {
@@ -130,7 +134,9 @@ public class StarDict {
             }
             try (DataInputStream idx = new DataInputStream(new BufferedInputStream(is));
                  ByteArrayOutputStream mem = new ByteArrayOutputStream()) {
+                int c = 0;
                 while (true) {
+                    c = c % types.length;
                     int b = idx.read();
                     if (b == -1) {
                         break;
@@ -145,7 +151,8 @@ public class StarDict {
                             bodyOffset = idx.readInt();
                         }
                         int bodyLength = idx.readInt();
-                        builder.add(key, bodyOffset, bodyLength);
+                        builder.add(key, new IndexEntry(bodyOffset, bodyLength, types[c]));
+                        c++;
                     } else {
                         mem.write(b);
                     }

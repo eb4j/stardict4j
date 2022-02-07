@@ -30,10 +30,12 @@ import java.util.Objects;
 public class IndexEntry {
     private final long start;
     private final int len;
+    private final DictionaryEntry.EntryType type;
 
-    public IndexEntry(final long start, final int len) {
+    public IndexEntry(final long start, final int len, final DictionaryEntry.EntryType type) {
         this.start = start;
         this.len = len;
+        this.type = type;
     }
 
     public long getStart() {
@@ -42,6 +44,10 @@ public class IndexEntry {
 
     public int getLen() {
         return len;
+    }
+
+    public DictionaryEntry.EntryType getType() {
+        return type;
     }
 
     @Override

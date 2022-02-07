@@ -60,7 +60,7 @@ public abstract class StarDictDictionary implements AutoCloseable {
     public List<DictionaryEntry> readArticles(final String word) {
         List<DictionaryEntry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUp(word)) {
-            DictionaryEntry dictionaryEntry = new DictionaryEntry(e.getKey(), getArticle(e.getValue()));
+            DictionaryEntry dictionaryEntry = new DictionaryEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
             list.add(dictionaryEntry);
         }
         return list;
@@ -69,7 +69,7 @@ public abstract class StarDictDictionary implements AutoCloseable {
     public List<DictionaryEntry> readArticlesPredictive(final String word) {
         List<DictionaryEntry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUpPredictive(word)) {
-            DictionaryEntry dictionaryEntry = new DictionaryEntry(e.getKey(), getArticle(e.getValue()));
+            DictionaryEntry dictionaryEntry = new DictionaryEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
             list.add(dictionaryEntry);
         }
         return list;
@@ -77,6 +77,10 @@ public abstract class StarDictDictionary implements AutoCloseable {
 
     private synchronized String getArticle(final IndexEntry starDictEntry) {
         return cache.computeIfAbsent(starDictEntry, (e) -> readArticle(e.getStart(), e.getLen()));
+    }
+
+    private synchronized DictionaryEntry.EntryType getType(final IndexEntry starDictEntry) {
+        return starDictEntry.getType();
     }
 
     /**

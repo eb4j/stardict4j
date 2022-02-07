@@ -50,16 +50,16 @@ final class DictionaryDataBuilder<T> {
      *
      * @param key
      */
-    public void add(final String key, final long offset, final int size) {
+    public void add(final String key, final IndexEntry entry) {
         keys.add(key);
         Object stored = mapPatriciaTrie.get(key);
         if (stored == null) {
-            mapPatriciaTrie.insert(key, new IndexEntry(offset, size));
+            mapPatriciaTrie.insert(key, entry);
         } else {
             if (stored instanceof Object[]) {
-                stored = extendArray((Object[]) stored, new IndexEntry(offset, size));
+                stored = extendArray((Object[]) stored, entry);
             } else {
-                stored = new Object[] {stored, new IndexEntry(offset, size)};
+                stored = new Object[] {stored, entry};
             }
             mapPatriciaTrie.put(key, stored);
         }
@@ -74,7 +74,7 @@ final class DictionaryDataBuilder<T> {
         } else {
             entry = (IndexEntry) stored;
         }
-        add(ref, entry.getStart(), entry.getLen());
+        add(ref, entry);
     }
 
     /**
