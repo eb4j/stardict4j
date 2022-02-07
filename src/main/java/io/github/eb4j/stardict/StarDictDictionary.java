@@ -39,6 +39,7 @@ public abstract class StarDictDictionary implements AutoCloseable {
     /**
      * Constructor.
      * @param data collection of <code>IndexEntry</code>s loaded from file
+     * @param info metadata info.
      */
     public StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info) {
         this.data = data;
@@ -149,8 +150,8 @@ public abstract class StarDictDictionary implements AutoCloseable {
             return typeValue;
         }
 
-        public static EntryType getTypeByValue(char c) {
-            for (EntryType t: .values()) {
+        public static EntryType getTypeByValue(final char c) {
+            for (EntryType t: EntryType.values()) {
                 if (t.getTypeValue() == c) {
                     return t;
                 }
