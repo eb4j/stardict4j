@@ -63,13 +63,6 @@ public class StarDictTest {
         assertEquals(word, result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
 
-        // Test case normalization
-        word = word.toUpperCase(Locale.FRENCH);
-        result = dict.readArticles(word);
-        assertEquals(1, result.size());
-        assertEquals("testudo", result.get(0).getWord());
-        assertEquals("dinis, f. : tortue", result.get(0).getArticle());
-
         // Test prediction
         word = "testu";
         result = dict.readArticles(word);

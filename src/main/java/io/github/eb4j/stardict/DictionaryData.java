@@ -55,7 +55,9 @@ class DictionaryData<T> {
      * @return A list of stored objects matching the given word
      */
     public List<Entry<String, T>> lookUp(final String word) {
-        return doLookUpWithLowerCase(word, false);
+        List<Entry<String, T>> result = new ArrayList<>();
+        get(word, data.get(word), result);
+        return result;
     }
 
     /**
@@ -67,25 +69,8 @@ class DictionaryData<T> {
      * @return A list of stored objects matching the given word
      */
     public List<Entry<String, T>> lookUpPredictive(final String word) {
-        return doLookUpWithLowerCase(word, true);
-    }
-
-    private List<Entry<String, T>> doLookUpWithLowerCase(final String word, final boolean predictive) {
-        List<Entry<String, T>> result = doLookUp(word, predictive);
-        if (result.isEmpty()) {
-            String lowerWord = word.toLowerCase();
-            result = doLookUp(lowerWord, predictive);
-        }
-        return result;
-    }
-
-    private List<Entry<String, T>> doLookUp(final String word, final boolean predictive) {
         List<Entry<String, T>> result = new ArrayList<>();
-        if (predictive) {
-            data.predictiveSearch(word).forEach(w -> get(w, data.get(w), result));
-        } else {
-            get(word, data.get(word), result);
-        }
+        data.predictiveSearch(word).forEach(w -> get(w, data.get(w), result));
         return result;
     }
 
