@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -40,12 +41,28 @@ public final class StarDictLoader {
     }
 
     /**
-     * load stardict dictionary file.
+     * Default loader of stardict dictionary file.
+     * <p>
+     * cacheSize is 1,000 items with 10 minutes expiry.
+     *
      * @param ifoFile .ifo file of the dictionary to load.
      * @return StarDictDictionary object.
      * @throws Exception when dictionary file is invalid, or i/o error occured.
      */
     public static StarDictDictionary load(final File ifoFile) throws Exception {
+        return load(ifoFile, 1_000, Duration.ofMinutes(10));
+    }
+
+    /**
+     * load stardict dictionary file.
+     * @param ifoFile .ifo file of the dictionary to load.
+     * @param cacheSize size of entry cache.
+     * @param duration duration to keep entry in cache.
+     * @return StarDictDictionary object.
+     * @throws Exception when dictionary file is invalid, or i/o error occurred.
+     */
+    public static StarDictDictionary load(final File ifoFile, final int cacheSize, final Duration duration)
+            throws Exception {
         Map<String, String> header = readIFO(ifoFile);
         StarDictInfo info = new StarDictInfo(header);
         String version = info.getVersion();
@@ -90,9 +107,9 @@ public final class StarDictLoader {
 
         try {
             if (dictFile.getName().endsWith(".dz")) {
-                return new StarDictZipDict(info, dictFile, data);
+                return new StarDictZipDict(info, dictFile, data, cacheSize, duration);
             } else {
-                return new StarDictFileDict(info, dictFile, data);
+                return new StarDictFileDict(info, dictFile, data, cacheSize, duration);
             }
         } catch (IOException ex) {
             throw new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName);

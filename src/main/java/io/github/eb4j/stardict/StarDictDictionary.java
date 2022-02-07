@@ -20,9 +20,12 @@
  */
 package io.github.eb4j.stardict;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,19 +34,28 @@ import java.util.Map;
  */
 public abstract class StarDictDictionary implements AutoCloseable {
 
+    private final LoadingCache<IndexEntry, String> cache;
+
     /** dictionary index data. */
     protected final DictionaryData<IndexEntry> data;
     /** dictionary metadata. */
     protected final StarDictInfo info;
 
     /**
-     * Constructor.
+     * Defualt constructor.
      * @param data collection of <code>IndexEntry</code>s loaded from file
+     * @param maxsize max size of cache.
+     * @param duration duration to keep in cache.
      * @param info metadata info.
      */
-    public StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info) {
+    public StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info, final int maxsize,
+                              final Duration duration) {
         this.data = data;
         this.info = info;
+        cache = Caffeine.newBuilder()
+                .maximumSize(maxsize)
+                .expireAfterWrite(duration)
+                .build(e -> readArticle(e.getStart(), e.getLen()));
     }
 
     /**
@@ -70,12 +82,10 @@ public abstract class StarDictDictionary implements AutoCloseable {
         return info;
     }
 
-    private final Map<IndexEntry, String> cache = new HashMap<>();
-
     public List<Entry> readArticles(final String word) {
         List<Entry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUp(word)) {
-            Entry entry = new Entry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
+            Entry entry = new Entry(e.getKey(), getType(e.getValue()), cache.get(e.getValue()));
             list.add(entry);
         }
         return list;
@@ -84,14 +94,10 @@ public abstract class StarDictDictionary implements AutoCloseable {
     public List<Entry> readArticlesPredictive(final String word) {
         List<Entry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUpPredictive(word)) {
-            Entry entry = new Entry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
+            Entry entry = new Entry(e.getKey(), getType(e.getValue()), cache.get(e.getValue()));
             list.add(entry);
         }
         return list;
-    }
-
-    private synchronized String getArticle(final IndexEntry starDictEntry) {
-        return cache.computeIfAbsent(starDictEntry, (e) -> readArticle(e.getStart(), e.getLen()));
     }
 
     private synchronized EntryType getType(final IndexEntry starDictEntry) {

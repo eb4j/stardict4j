@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 /**
  * DictZip compressed .dict.dz file access class.
@@ -42,9 +43,9 @@ public class StarDictZipDict extends StarDictDictionary {
      * @param data index data.
      * @throws IOException when dictionary file not found, or compression is not recognized.
      */
-    StarDictZipDict(final StarDictInfo info, final File dictFile, final DictionaryData<IndexEntry> data)
-            throws IOException {
-        super(data, info);
+    StarDictZipDict(final StarDictInfo info, final File dictFile, final DictionaryData<IndexEntry> data,
+                    final int cacheSize, final Duration duration) throws Exception {
+        super(data, info, cacheSize, duration);
         dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
     }
 
