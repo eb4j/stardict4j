@@ -29,7 +29,7 @@ public class StarDictEntry {
         /** Word's pure text meaning. */
         MEAN('m'),
         /** English phonetic string.  */
-        PHENETIC('t'),
+        PHONETIC('t'),
         /** A string which is marked up with the Pango text markup language. */
         PANGO('g'),
         /** A string which is marked up with the xdxf language. */
