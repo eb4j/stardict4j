@@ -1,10 +1,14 @@
 plugins {
-    `java-library`
     checkstyle
     jacoco
+    signing
+    `java-library`
+    `java-library-distribution`
+    `maven-publish`
     id("com.github.spotbugs") version "5.0.3"
     id("com.diffplug.spotless") version "6.0.5"
     id("com.github.kt3k.coveralls") version "2.12.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("com.palantir.git-version") version "0.12.3"
 }
 
@@ -71,4 +75,63 @@ coveralls {
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-Xlint:deprecation")
     options.compilerArgs.add("-Xlint:unchecked")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("stardict4j")
+                description.set("Stardict access library for java")
+                url.set("https://github.com/eb4j/stardict4j")
+                licenses {
+                    license {
+                        name.set("The GNU General Public License, Version 3")
+                        url.set("https://www.gnu.org/licenses/licenses/gpl-3.html")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("miurahr")
+                        name.set("Hiroshi Miura")
+                        email.set("miurahr@linux.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/eb4j/stardict4j.git")
+                    developerConnection.set("scm:git:git://github.com/eb4j/stardict4j.git")
+                    url.set("https://github.com/eb4j/stardict4j")
+                }
+            }
+        }
+    }
+}
+
+signing {
+    if (project.hasProperty("signingKey")) {
+        val signingKey: String? by project
+        val signingPassword: String? by project
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    } else {
+        useGpgCmd()
+    }
+    sign(publishing.publications["mavenJava"])
+}
+
+tasks.withType<Sign> {
+    val hasKey = project.hasProperty("signingKey") || project.hasProperty("signing.gnupg.keyName")
+    onlyIf { hasKey && details.isCleanTag }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username.set(System.getenv("SONATYPE_USER"))
+            password.set(System.getenv("SONATYPE_PASS"))
+        }
+    }
 }
