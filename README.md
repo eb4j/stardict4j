@@ -72,11 +72,18 @@ Here is a simple example how to use it.
 import io.github.eb4j.stardict.*;
 public class Main {
     public static void main(){
-        StarDictDictionary dict=StarDict.loadDict(new File("dictionayr.ifo"));
+        StarDictDictionary dict=StarDictLoder.load(new File("dictionayr.ifo"));
         String word="testudo";
-        List<DictionaryEntry> results=dict.readArticles(word);
-        for(DictionaryEntry en:results){
-        System.out.println(String.format("%s has meanings of %s\n", en.getWord(), en.getArticle()));
+        for (StarDictEntry en: dict.readArticles(word)){
+            switch (en.getType()) {
+                case MEAN:
+                    System.out.println(String.format("%s has meanings of %s\n", en.getWord(), en.getArticle()));
+                    break;
+                case PHONETIC:
+                    System.out.println(String.format("%s pronounce is %s\n", en.getWord(), en.getArticle()));
+                    break;
+                default:
+            }
         }
     }
 }
