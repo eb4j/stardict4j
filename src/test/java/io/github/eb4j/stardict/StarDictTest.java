@@ -43,6 +43,15 @@ public class StarDictTest {
     @Test
     public void testReadFileDict() throws Exception {
         StarDictDictionary dict = new StarDict().loadDict(new File("src/test/resources/dicts/latin-francais.ifo"));
+        assertEquals("latin-français", dict.getDictionaryName());
+        assertEquals("2.4.2", dict.getDictionaryVersion());
+        StarDictInfo info = dict.getInformation();
+        assertEquals("m", info.getSametypesequence());
+        assertEquals("Yves Ouvrard", info.getAuthor());
+        assertEquals("http://www.collatinus.org/", info.getWebsite());
+        assertTrue(info.getDescription().startsWith("Dictionnaire"));
+        assertEquals("1er Novembre 2007", info.getDate());
+        assertEquals(10451, info.getWordCount());
         assertEquals(10451, dict.data.size());
 
         String word = "testudo";
@@ -75,6 +84,8 @@ public class StarDictTest {
     public void testReadZipDict() throws Exception {
         StarDictDictionary dict = new StarDict()
                 .loadDict(new File("src/test/resources/dicts-zipped/latin-francais.ifo"));
+        assertEquals("latin-français", dict.getDictionaryName());
+        assertEquals("2.4.2", dict.getDictionaryVersion());
         assertEquals(10451, dict.data.size());
 
         String word = "testudo";

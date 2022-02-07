@@ -51,6 +51,10 @@ public abstract class StarDictDictionary implements AutoCloseable {
         return info.getVersion();
     }
 
+    public StarDictInfo getInformation() {
+        return info;
+    }
+
     private final Map<IndexEntry, String> cache = new HashMap<>();
 
     public List<DictionaryEntry> readArticles(final String word) {
