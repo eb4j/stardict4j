@@ -20,7 +20,7 @@ package io.github.eb4j.stardict;
 /**
  * Dictionary article data class.
  */
-public class DictionaryEntry {
+public class StarDictEntry {
 
     /**
      * Entry types.
@@ -77,7 +77,7 @@ public class DictionaryEntry {
     private final EntryType type;
     private final String article;
 
-    public DictionaryEntry(final String word, final EntryType type, final String article) {
+    public StarDictEntry(final String word, final EntryType type, final String article) {
         this.word = word;
         this.type = type;
         this.article = article;

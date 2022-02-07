@@ -47,9 +47,9 @@ public class StarDictLoader {
             throw new Exception("Invalid version of dictionary: " + version);
         }
         String sametypesequence = header.get("sametypesequence");
-        DictionaryEntry.EntryType[] types = new DictionaryEntry.EntryType[sametypesequence.length()];
+        StarDictEntry.EntryType[] types = new StarDictEntry.EntryType[sametypesequence.length()];
         for (int i = 0; i < sametypesequence.length(); i++) {
-            types[i] = DictionaryEntry.EntryType.getTypeByValue(sametypesequence.charAt(i));
+            types[i] = StarDictEntry.EntryType.getTypeByValue(sametypesequence.charAt(i));
             if (types[i] == null) {
                 throw new Exception("Invalid dictionary type: " + sametypesequence);
             }
@@ -124,7 +124,7 @@ public class StarDictLoader {
     }
 
     private static DictionaryData<IndexEntry> loadData(final File idxFile, final File synFile, final boolean off64,
-                                                       final DictionaryEntry.EntryType[] types) throws IOException {
+                                                       final StarDictEntry.EntryType[] types) throws IOException {
         DictionaryDataBuilder<IndexEntry> builder = new DictionaryDataBuilder<>();
         InputStream is = new FileInputStream(idxFile);
         try {

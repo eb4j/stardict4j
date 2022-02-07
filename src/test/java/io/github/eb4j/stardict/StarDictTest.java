@@ -58,7 +58,7 @@ public class StarDictTest {
         List<Entry<String, IndexEntry>> data = dict.data.lookUp(word);
         assertEquals(1, data.size());
 
-        List<DictionaryEntry> result = dict.readArticles(word);
+        List<StarDictEntry> result = dict.readArticles(word);
         assertEquals(1, result.size());
         assertEquals(word, result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
@@ -78,7 +78,7 @@ public class StarDictTest {
         assertEquals(1, result.size());
         assertEquals("testudo", result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
-        assertEquals(DictionaryEntry.EntryType.MEAN, result.get(0).getType());
+        assertEquals(StarDictEntry.EntryType.MEAN, result.get(0).getType());
     }
 
     @Test
@@ -91,11 +91,11 @@ public class StarDictTest {
         String word = "testudo";
         List<Entry<String, IndexEntry>> data = dict.data.lookUp(word);
         assertEquals(1, data.size());
-        List<DictionaryEntry> result = dict.readArticles(word);
+        List<StarDictEntry> result = dict.readArticles(word);
         assertEquals(1, result.size());
         assertFalse(result.isEmpty());
         assertEquals(word, result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
-        assertEquals(DictionaryEntry.EntryType.MEAN, result.get(0).getType());
+        assertEquals(StarDictEntry.EntryType.MEAN, result.get(0).getType());
     }
 }

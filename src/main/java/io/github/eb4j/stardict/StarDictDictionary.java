@@ -57,20 +57,20 @@ public abstract class StarDictDictionary implements AutoCloseable {
 
     private final Map<IndexEntry, String> cache = new HashMap<>();
 
-    public List<DictionaryEntry> readArticles(final String word) {
-        List<DictionaryEntry> list = new ArrayList<>();
+    public List<StarDictEntry> readArticles(final String word) {
+        List<StarDictEntry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUp(word)) {
-            DictionaryEntry dictionaryEntry = new DictionaryEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
-            list.add(dictionaryEntry);
+            StarDictEntry starDictEntry = new StarDictEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
+            list.add(starDictEntry);
         }
         return list;
     }
 
-    public List<DictionaryEntry> readArticlesPredictive(final String word) {
-        List<DictionaryEntry> list = new ArrayList<>();
+    public List<StarDictEntry> readArticlesPredictive(final String word) {
+        List<StarDictEntry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUpPredictive(word)) {
-            DictionaryEntry dictionaryEntry = new DictionaryEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
-            list.add(dictionaryEntry);
+            StarDictEntry starDictEntry = new StarDictEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
+            list.add(starDictEntry);
         }
         return list;
     }
@@ -79,7 +79,7 @@ public abstract class StarDictDictionary implements AutoCloseable {
         return cache.computeIfAbsent(starDictEntry, (e) -> readArticle(e.getStart(), e.getLen()));
     }
 
-    private synchronized DictionaryEntry.EntryType getType(final IndexEntry starDictEntry) {
+    private synchronized StarDictEntry.EntryType getType(final IndexEntry starDictEntry) {
         return starDictEntry.getType();
     }
 
