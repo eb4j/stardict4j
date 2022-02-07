@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## 0.1.0
+## [v0.1.1]
+* Fix javadoc
+ 
+## v0.1.0
 * First internal release
 
-[Unreleased]: https://github.com/eb4j/dsl4j/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/eb4j/stardict4j/compare/v0.1.1...HEAD
+[v0.1.1]: https://github.com/eb4j/stardict4j/compare/v0.1.0...v0.1.1
