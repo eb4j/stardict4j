@@ -34,7 +34,7 @@ import java.util.zip.GZIPInputStream;
  * @author Aaron Madlon-Kay
  * @author Suguru Oho
  */
-public class StarDictLoader {
+public final class StarDictLoader {
 
     private StarDictLoader() {
     }
