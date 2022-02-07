@@ -72,6 +72,10 @@ coveralls {
     jacocoReportPath = "build/reports/jacoco/test/jacocoTestReport.xml"
 }
 
+tasks.coveralls {
+    dependsOn(tasks.jacocoTestReport)
+}
+
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-Xlint:deprecation")
     options.compilerArgs.add("-Xlint:unchecked")
