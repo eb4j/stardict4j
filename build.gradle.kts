@@ -27,7 +27,6 @@ java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -74,6 +73,13 @@ coveralls {
 
 tasks.coveralls {
     dependsOn(tasks.jacocoTestReport)
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.withType<JavaCompile> {

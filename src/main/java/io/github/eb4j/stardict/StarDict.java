@@ -21,7 +21,6 @@ import java.util.zip.GZIPInputStream;
  * Dictionary driver for StarDict format.
  * <p>
  * StarDict format described on https://github.com/huzheng001/stardict-3/blob/master/dict/doc/StarDictFileFormat
- * <p>
  * <h1>Files</h1>
  * Every dictionary consists of these files:
  * <ol><li>somedict.ifo
