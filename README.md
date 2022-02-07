@@ -1,4 +1,4 @@
-# stardict4j = access library for stardict dictionary format
+# stardict4j - access library for stardict dictionary format
 
 StarDict is an one of popular dictionary formats.
 stardict4j is an access library of StarDict dictionary file for Java.
