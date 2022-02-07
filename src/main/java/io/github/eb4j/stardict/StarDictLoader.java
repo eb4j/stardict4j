@@ -34,12 +34,12 @@ import java.util.zip.GZIPInputStream;
  * @author Aaron Madlon-Kay
  * @author Suguru Oho
  */
-public class StarDict {
+public class StarDictLoader {
 
-    private StarDict() {
+    private StarDictLoader() {
     }
 
-    public static StarDictDictionary loadDict(final File ifoFile) throws Exception {
+    public static StarDictDictionary load(final File ifoFile) throws Exception {
         Map<String, String> header = readIFO(ifoFile);
         StarDictInfo info = new StarDictInfo(header);
         String version = info.getVersion();

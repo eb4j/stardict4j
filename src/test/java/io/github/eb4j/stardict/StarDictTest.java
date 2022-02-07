@@ -42,7 +42,7 @@ public class StarDictTest {
 
     @Test
     public void testReadFileDict() throws Exception {
-        StarDictDictionary dict = StarDict.loadDict(new File("src/test/resources/dicts/latin-francais.ifo"));
+        StarDictDictionary dict = StarDictLoader.load(new File("src/test/resources/dicts/latin-francais.ifo"));
         assertEquals("latin-français", dict.getDictionaryName());
         assertEquals("2.4.2", dict.getDictionaryVersion());
         StarDictInfo info = dict.getInformation();
@@ -83,7 +83,7 @@ public class StarDictTest {
 
     @Test
     public void testReadZipDict() throws Exception {
-        StarDictDictionary dict = StarDict.loadDict(new File("src/test/resources/dicts-zipped/latin-francais.ifo"));
+        StarDictDictionary dict = StarDictLoader.load(new File("src/test/resources/dicts-zipped/latin-francais.ifo"));
         assertEquals("latin-français", dict.getDictionaryName());
         assertEquals("2.4.2", dict.getDictionaryVersion());
         assertEquals(10451, dict.data.size());
