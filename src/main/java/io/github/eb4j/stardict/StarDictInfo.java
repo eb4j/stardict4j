@@ -18,7 +18,6 @@
 
 package io.github.eb4j.stardict;
 
-import java.text.DateFormat;
 import java.util.Map;
 
 public class StarDictInfo {

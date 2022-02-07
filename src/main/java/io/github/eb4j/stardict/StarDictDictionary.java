@@ -31,26 +31,40 @@ import java.util.Map;
  */
 public abstract class StarDictDictionary implements AutoCloseable {
 
+    /** dictionary index data. */
     protected final DictionaryData<IndexEntry> data;
-
+    /** dictionary metadata. */
     protected final StarDictInfo info;
 
     /**
-     * @param data collection of <code>Entry</code>s loaded from file
+     * Constructor.
+     * @param data collection of <code>IndexEntry</code>s loaded from file
      */
-    StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info) {
+    public StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info) {
         this.data = data;
         this.info = info;
     }
 
+    /**
+     * get human readable name.
+     * @return name
+     */
     public String getDictionaryName() {
         return info.getBookName();
     }
 
+    /**
+     * Get dictionary version.
+     * @return version whether "2.4.2" or "3.0.0"
+     */
     public String getDictionaryVersion() {
         return info.getVersion();
     }
 
+    /**
+     * return dicitionary information class.
+     * @return StarDictInfo object.
+     */
     public StarDictInfo getInformation() {
         return info;
     }

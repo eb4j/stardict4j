@@ -32,20 +32,38 @@ public class IndexEntry {
     private final int len;
     private final StarDictDictionary.EntryType type;
 
+    /**
+     * Constructor.
+     * @param start start offset.
+     * @param len byte length of article.
+     * @param type article type.
+     */
     public IndexEntry(final long start, final int len, final StarDictDictionary.EntryType type) {
         this.start = start;
         this.len = len;
         this.type = type;
     }
 
+    /**
+     * return offset.
+     * @return offset.
+     */
     public long getStart() {
         return start;
     }
 
+    /**
+     * return byte length of article.
+     * @return article length.
+     */
     public int getLen() {
         return len;
     }
 
+    /**
+     * return EntryType of article.
+     * @return value of enum EntryType
+     */
     public StarDictDictionary.EntryType getType() {
         return type;
     }

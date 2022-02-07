@@ -28,16 +28,29 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * DictZip compressed .dict.dz file access class.
+ */
 public class StarDictZipDict extends StarDictDictionary {
 
     private final DictZipInputStream dataFile;
 
+    /**
+     * Constractor.
+     * @param info metadata info.
+     * @param dictFile dictionary file.
+     * @param data index data.
+     * @throws IOException when dictionary file not found, or compression is not recognized.
+     */
     StarDictZipDict(final StarDictInfo info, final File dictFile, final DictionaryData<IndexEntry> data)
             throws IOException {
         super(data, info);
         dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String readArticle(final long start, final int len) {
         String result = null;
@@ -51,6 +64,9 @@ public class StarDictZipDict extends StarDictDictionary {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() throws IOException {
         dataFile.close();

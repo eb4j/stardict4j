@@ -39,6 +39,12 @@ public class StarDictLoader {
     private StarDictLoader() {
     }
 
+    /**
+     * load stardict dictionary file.
+     * @param ifoFile .ifo file of the dictionary to load.
+     * @return StarDictDictionary object.
+     * @throws Exception when dictionary file is invalid, or i/o error occured.
+     */
     public static StarDictDictionary load(final File ifoFile) throws Exception {
         Map<String, String> header = readIFO(ifoFile);
         StarDictInfo info = new StarDictInfo(header);

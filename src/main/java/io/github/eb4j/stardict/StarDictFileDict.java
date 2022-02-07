@@ -26,15 +26,28 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Non-compressed .dict file access class.
+ */
 public class StarDictFileDict extends StarDictDictionary {
     private final RandomAccessFile dataFile;
 
+    /**
+     * Constractor of non-compressed .dict data file access class.
+     * @param info metadata info.
+     * @param dictFile dictionary file.
+     * @param data index data.
+     * @throws FileNotFoundException when dictionary file not found.
+     */
     StarDictFileDict(final StarDictInfo info, final File dictFile, final DictionaryData<IndexEntry> data)
             throws FileNotFoundException {
         super(data, info);
         dataFile = new RandomAccessFile(dictFile, "r");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String readArticle(final long start, final int len) {
         String result = null;
@@ -48,6 +61,10 @@ public class StarDictFileDict extends StarDictDictionary {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void close() throws IOException {
         dataFile.close();
     }
