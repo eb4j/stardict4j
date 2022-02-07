@@ -30,9 +30,9 @@ import java.util.Objects;
 public class IndexEntry {
     private final long start;
     private final int len;
-    private final StarDictEntry.EntryType type;
+    private final StarDictDictionary.EntryType type;
 
-    public IndexEntry(final long start, final int len, final StarDictEntry.EntryType type) {
+    public IndexEntry(final long start, final int len, final StarDictDictionary.EntryType type) {
         this.start = start;
         this.len = len;
         this.type = type;
@@ -46,7 +46,7 @@ public class IndexEntry {
         return len;
     }
 
-    public StarDictEntry.EntryType getType() {
+    public StarDictDictionary.EntryType getType() {
         return type;
     }
 

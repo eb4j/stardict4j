@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -55,10 +55,10 @@ public class StarDictTest {
         assertEquals(10451, dict.data.size());
 
         String word = "testudo";
-        List<Entry<String, IndexEntry>> data = dict.data.lookUp(word);
+        List<Map.Entry<String, IndexEntry>> data = dict.data.lookUp(word);
         assertEquals(1, data.size());
 
-        List<StarDictEntry> result = dict.readArticles(word);
+        List<StarDictDictionary.Entry> result = dict.readArticles(word);
         assertEquals(1, result.size());
         assertEquals(word, result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
@@ -78,7 +78,7 @@ public class StarDictTest {
         assertEquals(1, result.size());
         assertEquals("testudo", result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
-        assertEquals(StarDictEntry.EntryType.MEAN, result.get(0).getType());
+        assertEquals(StarDictDictionary.EntryType.MEAN, result.get(0).getType());
     }
 
     @Test
@@ -89,13 +89,13 @@ public class StarDictTest {
         assertEquals(10451, dict.data.size());
 
         String word = "testudo";
-        List<Entry<String, IndexEntry>> data = dict.data.lookUp(word);
+        List<Map.Entry<String, IndexEntry>> data = dict.data.lookUp(word);
         assertEquals(1, data.size());
-        List<StarDictEntry> result = dict.readArticles(word);
+        List<StarDictDictionary.Entry> result = dict.readArticles(word);
         assertEquals(1, result.size());
         assertFalse(result.isEmpty());
         assertEquals(word, result.get(0).getWord());
         assertEquals("dinis, f. : tortue", result.get(0).getArticle());
-        assertEquals(StarDictEntry.EntryType.MEAN, result.get(0).getType());
+        assertEquals(StarDictDictionary.EntryType.MEAN, result.get(0).getType());
     }
 }

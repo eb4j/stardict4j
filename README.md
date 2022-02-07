@@ -72,9 +72,9 @@ Here is a simple example how to use it.
 import io.github.eb4j.stardict.*;
 public class Main {
     public static void main(){
-        StarDictDictionary dict=StarDictLoder.load(new File("dictionayr.ifo"));
         String word="testudo";
-        for (StarDictEntry en: dict.readArticles(word)){
+        StarDictDictionary dict=StarDictLoder.load(new File("dictionayr.ifo"));
+        for (StarDictDictionary.Entry en: dict.readArticles(word)){
             switch (en.getType()) {
                 case MEAN:
                     System.out.println(String.format("%s has meanings of %s\n", en.getWord(), en.getArticle()));

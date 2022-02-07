@@ -57,20 +57,20 @@ public abstract class StarDictDictionary implements AutoCloseable {
 
     private final Map<IndexEntry, String> cache = new HashMap<>();
 
-    public List<StarDictEntry> readArticles(final String word) {
-        List<StarDictEntry> list = new ArrayList<>();
+    public List<Entry> readArticles(final String word) {
+        List<Entry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUp(word)) {
-            StarDictEntry starDictEntry = new StarDictEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
-            list.add(starDictEntry);
+            Entry entry = new Entry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
+            list.add(entry);
         }
         return list;
     }
 
-    public List<StarDictEntry> readArticlesPredictive(final String word) {
-        List<StarDictEntry> list = new ArrayList<>();
+    public List<Entry> readArticlesPredictive(final String word) {
+        List<Entry> list = new ArrayList<>();
         for (Map.Entry<String, IndexEntry> e : data.lookUpPredictive(word)) {
-            StarDictEntry starDictEntry = new StarDictEntry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
-            list.add(starDictEntry);
+            Entry entry = new Entry(e.getKey(), getType(e.getValue()), getArticle(e.getValue()));
+            list.add(entry);
         }
         return list;
     }
@@ -79,7 +79,7 @@ public abstract class StarDictDictionary implements AutoCloseable {
         return cache.computeIfAbsent(starDictEntry, (e) -> readArticle(e.getStart(), e.getLen()));
     }
 
-    private synchronized StarDictEntry.EntryType getType(final IndexEntry starDictEntry) {
+    private synchronized EntryType getType(final IndexEntry starDictEntry) {
         return starDictEntry.getType();
     }
 
@@ -93,4 +93,95 @@ public abstract class StarDictDictionary implements AutoCloseable {
     protected abstract String readArticle(long start, int len);
 
     public abstract void close() throws IOException;
+
+    /**
+     * Entry types.
+     */
+    public enum EntryType {
+        /** Word's pure text meaning. */
+        MEAN('m'),
+        /** English phonetic string.  */
+        PHONETIC('t'),
+        /** A string which is marked up with the Pango text markup language. */
+        PANGO('g'),
+        /** A string which is marked up with the xdxf language. */
+        XDXF('x'),
+        /** Chinese YinBiao or Japanese KANA. */
+        YINBAO('y'),
+        /** KingSoft PowerWord's XML data. */
+        KINGSOFT('k'),
+        /** MediaWiki markup language. */
+        MEDIAWIKI('w'),
+        /** html codes. */
+        HTML('h'),
+        /** WordNet data. */
+        WORDNET('n'),
+        /** Resource file list. */
+        RESOURCE('r'),
+        /** WAVE file. */
+        WAV('W'),
+        /** Picture image. */
+        PICTURE('P'),
+        /** Reserved for experimental extension. */
+        EXPERIMENTAL('X');
+
+        private final char typeValue;
+
+        EntryType(final char type) {
+            typeValue = type;
+        }
+
+        public char getTypeValue() {
+            return typeValue;
+        }
+
+        public static EntryType getTypeByValue(char c) {
+            for (EntryType t: .values()) {
+                if (t.getTypeValue() == c) {
+                    return t;
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Dictionary article data class.
+     */
+    public static class Entry {
+
+        private final String word;
+        private final EntryType type;
+        private final String article;
+
+        public Entry(final String word, final EntryType type, final String article) {
+            this.word = word;
+            this.type = type;
+            this.article = article;
+        }
+
+        /**
+         * return entry word.
+         * @return entry word.
+         */
+        public String getWord() {
+            return word;
+        }
+
+        /**
+         * Return entry type.
+         * @return type enum value.
+         */
+        public EntryType getType() {
+            return type;
+        }
+
+        /**
+         * return article.
+         * @return article.
+         */
+        public String getArticle() {
+            return article;
+        }
+    }
 }
