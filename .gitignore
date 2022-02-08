@@ -26,3 +26,4 @@ build
 .gradle
 out
 version.properties
+.idea
