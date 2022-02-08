@@ -41,32 +41,6 @@ public final class StarDictLoader {
     }
 
     /**
-     * Default loader of stardict dictionary file.
-     * <p>
-     * cacheSize is 1,000 items with 10 minutes expiry.
-     *
-     * @param ifoFile .ifo file of the dictionary to load.
-     * @return StarDictDictionary object.
-     * @throws Exception when dictionary file is invalid, or i/o error occured.
-     */
-    public static StarDictDictionary load(final File ifoFile) throws Exception {
-        String f = ifoFile.getPath();
-        if (f.endsWith(".ifo")) {
-            f = f.substring(0, f.length() - ".ifo".length());
-        }
-        String dictName = f;
-        File dictFile = getFile(dictName, ".dict.dz", ".dict")
-                .orElseThrow(() -> new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName));
-        if (dictFile.toString().endsWith(".dz")) {
-            // need larger cache to avoid frequent zip inflation.
-            return load(ifoFile, 5_000, Duration.ofMinutes(15));
-        } else {
-            // no need a large cache, OS disk cache will work.
-            return load(ifoFile, 100, Duration.ofMinutes(5));
-        }
-    }
-
-    /**
      * load stardict dictionary file.
      * @param ifoFile .ifo file of the dictionary to load.
      * @param cacheSize size of entry cache.

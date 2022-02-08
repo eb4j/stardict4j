@@ -59,10 +59,17 @@ libraryDependencies += "io.github.eb4j" % "stardict4j" % "0.1.0"
 
 ## Use
 
-stardict4j provide a dictionary loader. You should call `StarDict#loadDict` method to load `.idx` and `.syn` file.
-The method return `StarDictDictionary` object that has methods `lookup` and `lookupPredictive`. The former method
-search word, and the latter si predictive, run prefix search for word.
-These method returns `List<DictionaryEntry>`.
+stardict4j provide a dictionary loader. You should call `StarDictDictionary#loadDictionary` method
+to load `.idx` and `.syn` file. The method return `StarDictDictionary` object that has
+methods `lookup` and `lookupPredictive`. The former method search word, and the latter si predictive,
+run prefix search for word. These method returns `List<DictionaryEntry>`.
+
+`StarDictDictionary#loadDictionary` method takes a File object of `.ifo` file or basename of dictionary files.
+It also optionally takes two arguments for cache control, maxSize and duration.
+The library will cache read articles in maxSize entries in duration expiry.
+
+Each `DictionaryEntry` entry has `type` of entry such as `MEAN`, `HTML` or others, that can be retrieve with
+`getType()` method.
 
 ### Example
 
@@ -73,7 +80,8 @@ import io.github.eb4j.stardict.*;
 public class Main {
     public static void main(){
         String word="testudo";
-        StarDictDictionary dict=StarDictLoder.load(new File("dictionayr.ifo"));
+        StarDictDictionary dict = StarDictDictionary.loadDictionary(
+                new File("dictionayr.ifo"), 500, Duration.ofMinutes(10));
         for (StarDictDictionary.Entry en: dict.readArticles(word)){
             switch (en.getType()) {
                 case MEAN:

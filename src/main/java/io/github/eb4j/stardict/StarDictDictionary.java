@@ -23,7 +23,10 @@ package io.github.eb4j.stardict;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +45,13 @@ public abstract class StarDictDictionary implements AutoCloseable {
     protected final StarDictInfo info;
 
     /**
-     * Defualt constructor.
+     * Default constructor.
      * @param data collection of <code>IndexEntry</code>s loaded from file
      * @param maxsize max size of cache.
      * @param duration duration to keep in cache.
      * @param info metadata info.
      */
-    public StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info, final int maxsize,
+    StarDictDictionary(final DictionaryData<IndexEntry> data, final StarDictInfo info, final int maxsize,
                               final Duration duration) {
         this.data = data;
         this.info = info;
@@ -56,6 +59,39 @@ public abstract class StarDictDictionary implements AutoCloseable {
                 .maximumSize(maxsize)
                 .expireAfterWrite(duration)
                 .build(e -> readArticle(e.getStart(), e.getLen()));
+    }
+
+    /**
+     * Builder utility method for StarDictDictionary.
+     * @param ifoFile .ifo file.
+     * @return StarDictDicitonary object.
+     * @throws Exception when i/o error or parse error occurred.
+     */
+    public static StarDictDictionary loadDictionary(final File ifoFile)
+            throws Exception {
+        String f = ifoFile.getPath();
+        if (f.endsWith(".ifo")) {
+            f = f.substring(0, f.length() - ".ifo".length());
+        }
+        Path dictPath = Paths.get(f + ".dict.dz");
+        if (dictPath.toString().endsWith(".dz")) {
+            return StarDictLoader.load(ifoFile, 1_000, Duration.ofMinutes(15));
+        } else {
+            return StarDictLoader.load(ifoFile, 500, Duration.ofMinutes(5));
+        }
+    }
+
+    /**
+     * Builder utility method for StarDictDictionary.
+     * @param ifoFile .ifo file.
+     * @param cacheSize cache size of article.
+     * @param duration cache expiry time.
+     * @return StarDictDicitonary object.
+     * @throws Exception when i/o error or parse error occurred.
+     */
+    public static StarDictDictionary loadDictionary(final File ifoFile, final int cacheSize, final Duration duration)
+            throws Exception {
+        return StarDictLoader.load(ifoFile, cacheSize, duration);
     }
 
     /**
