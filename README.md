@@ -22,7 +22,7 @@ A status of library development is considered as `Alpha`.
 <dependency>
   <groupId>io.github.eb4j</groupId>
   <artifactId>stardict4j</artifactId>
-  <version>0.1.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -30,10 +30,10 @@ A status of library development is considered as `Alpha`.
 
 ### Gradle Groovy DSL
 
-<details>validateAbsolutePath? 
+<details>
 
 ```groovy
-implementation 'io.github.eb4j:stardict4j:0.1.0'
+implementation 'io.github.eb4j:stardict4j:0.3.0'
 ```
 </details>
 
@@ -42,7 +42,7 @@ implementation 'io.github.eb4j:stardict4j:0.1.0'
 <details>
 
 ```kotlin
-implementation("io.github.eb4j:stardict4j:0.1.0")
+implementation("io.github.eb4j:stardict4j:0.3.0")
 ```
 
 </details>
@@ -52,7 +52,7 @@ implementation("io.github.eb4j:stardict4j:0.1.0")
 <details>
 
 ```
-libraryDependencies += "io.github.eb4j" % "stardict4j" % "0.1.0"
+libraryDependencies += "io.github.eb4j" % "stardict4j" % "0.3.0"
 ```
 
 </details>
@@ -76,21 +76,19 @@ Each `DictionaryEntry` entry has `type` of entry such as `MEAN`, `HTML` or other
 Here is a simple example how to use it.
 
 ```java
-import io.github.eb4j.stardict.*;
+import io.github.eb4j.stardict.StarDictDictionary;
+
 public class Main {
-    public static void main(){
-        String word="testudo";
+    public static void main() {
+        String word = "testudo";
         StarDictDictionary dict = StarDictDictionary.loadDictionary(
                 new File("dictionayr.ifo"), 500, Duration.ofMinutes(10));
-        for (StarDictDictionary.Entry en: dict.readArticles(word)){
+        for (StarDictDictionary.Entry en : dict.readArticles(word)) {
             switch (en.getType()) {
-                case MEAN:
-                    System.out.println(String.format("%s has meanings of %s\n", en.getWord(), en.getArticle()));
-                    break;
-                case PHONETIC:
-                    System.out.println(String.format("%s pronounce is %s\n", en.getWord(), en.getArticle()));
-                    break;
-                default:
+                case MEAN -> System.out.println(String.format("%s has meanings of %s\n", en.getWord(), en.getArticle()));
+                case PHONETIC -> System.out.println(String.format("%s pronounce is %s\n", en.getWord(), en.getArticle()));
+                default -> {
+                }
             }
         }
     }
