@@ -57,7 +57,7 @@ public abstract class StarDictDictionary implements AutoCloseable {
         this.info = info;
         cache = Caffeine.newBuilder()
                 .maximumSize(maxsize)
-                .expireAfterWrite(duration)
+                .expireAfterAccess(duration)
                 .build(e -> readArticle(e.getStart(), e.getLen()));
     }
 
