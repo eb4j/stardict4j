@@ -89,7 +89,9 @@ class DictionaryData<T> {
         }
         if (value instanceof Object[]) {
             for (Object o : (Object[]) value) {
-                into.add(new AbstractMap.SimpleImmutableEntry<>(key, (T) o));
+                if (o != null) {
+                    into.add(new AbstractMap.SimpleImmutableEntry<>(key, (T) o));
+                }
             }
         } else {
             into.add(new AbstractMap.SimpleImmutableEntry<>(key, (T) value));
