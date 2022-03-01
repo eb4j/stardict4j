@@ -1,6 +1,6 @@
-# stardict4j - access library for stardict dictionary format
+# stardict4j - access library for stardict dictionary
 
-StarDict is an one of popular dictionary formats.
+StarDict file is an one of popular dictionary data formats.
 stardict4j is an access library of StarDict dictionary file for Java.
 
 stardict4j supports `.ifo`, `.dict` or `.dict.dz`, `.syn`,
@@ -9,7 +9,7 @@ stardict4j loads an index data and parse its index into memory.
 
 ## Development status
 
-A status of library development is considered as `Alpha`.
+A status of library development is considered as `Beta`.
 
 ## Install
 
