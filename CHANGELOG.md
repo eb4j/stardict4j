@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v0.3.2]
+* Bump dictzip@0.12.2
+
 ## [v0.3.1]
 * Fix Null-Pointer exception when there are multiple articles in single
   entry with certain condition.(#11)
@@ -30,8 +33,9 @@ All notable changes to this project will be documented in this file.
 ## v0.1.0
 * First internal release
 
-[Unreleased]: https://github.com/eb4j/stardict4j/compare/v0.3.1...HEAD
-[v0.3.1]: https://github.com/eb4j/stardict4j/compare/v0.2.0...v0.3.1
+[Unreleased]: https://github.com/eb4j/stardict4j/compare/v0.3.2...HEAD
+[v0.3.2]: https://github.com/eb4j/stardict4j/compare/v0.3.1...v0.3.2
+[v0.3.1]: https://github.com/eb4j/stardict4j/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/eb4j/stardict4j/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/eb4j/stardict4j/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://github.com/eb4j/stardict4j/compare/v0.1.0...v0.1.1
