@@ -32,7 +32,7 @@ repositories {
 dependencies {
     implementation("io.github.dictzip:dictzip:0.13.0")
     implementation("com.github.takawitter:trie4j:0.9.8")
-    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
